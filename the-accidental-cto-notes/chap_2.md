@@ -79,24 +79,26 @@ Huge time-saver for an MVP.
 
 ---
 
-## **🖥️ Server Setup (DigitalOcean $5 Droplet)**
+## **🖥️ Server Setup (DigitalOcean Droplet)**
 
-### Why DO?
+### Droplet Specs:
 
-* Cheap
-* Simple
-* Reliable enough for MVP
-* Fast provisioning
+* **512 MB RAM**
+* **1 vCPU**
+* **20 GB SSD**
 
-### What they installed:
+This cost just **$5/month**, and was enough for the first version.
 
-* **Ubuntu** → base OS
-* **Nginx** → web server (waiter)
-* **Gunicorn** → app server (kitchen)
-* **Django** → main application (chef)
+### Setup Steps & Architecture:
 
-**Flow:**
-Client → Nginx → Gunicorn → Django → Postgres → Back to user
+* OS: Ubuntu
+* Web server: **Nginx** (waiter)
+* App server: **Gunicorn** (kitchen manager)
+* Application logic: **Django** (chef)
+* Database: **PostgreSQL** (organized pantry)
+
+**Request Flow:**
+User → Nginx → Gunicorn → Django → Postgres → Back to user
 
 ---
 
@@ -105,11 +107,11 @@ Client → Nginx → Gunicorn → Django → Postgres → Back to user
 * Build **fast**, not perfect.
 * Don’t over-engineer an MVP.
 * Choose a **framework that reduces decisions** (Django).
-* You need **just enough** server to test your idea.
-* Understand basic web infra:
+* A small server (512 MB RAM + 20 GB SSD) can be enough for early MVP.
+* Understand basic web infrastructure:
 
-  * **Nginx = handles requests**
-  * **Gunicorn = runs Python app**
-  * **Django = application logic**
+  * **Nginx = handles requests / static files**
+  * **Gunicorn = runs the Python application**
+  * **Django = application logic + routing + data handling**
 
 ---
