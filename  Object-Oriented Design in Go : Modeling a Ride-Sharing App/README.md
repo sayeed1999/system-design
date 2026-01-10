@@ -1,12 +1,14 @@
 # Object-Oriented Design in Go: Modeling a Ride Sharing App
 
-## Define Core Entities
+## Define Core Entities: Rider, Passenger
 
 First we define the core entities.
 
-We start with Driver and Passenger: the two must entity for a ride sharing app like Pathao/Uber.
+We start with Rider and Passenger: the two must entity for a ride sharing app like Pathao/Uber.
 
 ```go
+package domain
+
 type Rider struct {
 	ID   string
 	Name string
@@ -37,6 +39,8 @@ We want to centralize the common behavior within the two entities.
 So we make a base entity for both rider & passenger, say `Person`.
 
 ```go
+package domain
+
 type Person struct {
 	ID              string
 	Name            string
@@ -50,6 +54,8 @@ Here is the truth: Go doesn't support classical inheritance like other OOP langu
 So to mimic inheritance, we embed the base struct in child structs like composition.
 
 ```go
+package domain
+
 type Rider struct {
 	Person // Rider IS A Person
 
@@ -69,6 +75,8 @@ type Passenger struct {
 Since this is not identical to classical inheritance, we cannot assign `rider.Name` directly, instead in golang we do `rider.Person.Name`. In constructor, we do like this -
 
 ```go
+package domain
+
 func NewRider(id string, name string, phone string, email string, currentLocation string, vehicleRegNo string, licenseNo string) *Rider {
 	return &Rider{
 		Person: Person{
@@ -105,6 +113,8 @@ Now the next enhancement is the `CurrentLocation`. Previously we kept it as a st
 We can either create two fields LatX and LonY inside Person struct, or we can encapsulate them into a separate struct `Location` and **embed** in `Person` struct.
 
 ```go
+package domain
+
 type Location struct {
 	LatitudeX float64
 	LongitudeY float64
@@ -146,3 +156,44 @@ func main() {
 	fmt.Printf("Passenger: %+v\n", passenger)
 }
 ```
+
+## Extend Core Entities: Rider, Passenger -> TripRequest -> Trip -> Payment
+
+Now that we are done with the two pillars Rider & Passenger, we will move to the business logic.
+
+- When a passenger needs a ride, he creates a request for a ride, say `TripRequest`
+- Once a rider accepts the request, then it becomes a trip (the journery from A -> B), say `Trip`
+- Once the ride is finished, we need a payment for the ride, say `Payment`.
+
+So this is the chain of entities needed: trip_request -> trip -> payment.
+
+We assume a `trip_request` will start from the passenger's current location. So we didn't take `pickup_location` in `NewTripRequest(...)` params. <i>Later, you can ofcourse enhance a passenger's ability to choose a different pickup location.</i>
+
+```go
+package domain
+
+type TripRequest struct {
+	PassengerID string
+	Passenger Passenger // TripRequest HAS-A Passenger (composition)
+	PickupLocation Location
+	DropoffLocation Location
+	RequestTime time.Time
+	PaymentAmount int
+}
+
+func NewTripRequest(Passenger Passenger, DropoffLocation Location, PaymentAmount int) *TripRequest {
+	return &TripRequest{
+		Passenger: Passenger,
+		PickupLocation: Passenger.CurrentLocation, // a trip must start from the passenger's current location
+		DropoffLocation: DropoffLocation,
+		RequestTime: time.Now().UTC(),
+		PaymentAmount: PaymentAmount,
+	}
+}
+```
+
+You should notice - there is no rider info in a trip_request. Because there can be a trip_request, but no driver found.
+
+But once a driver wants to accept a request, it shall convert to a trip which requires both parties presence!
+
+
