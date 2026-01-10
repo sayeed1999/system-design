@@ -11,7 +11,7 @@ func main() {
 		"John Doe",
 		"+1234567890",
 		"john.doe@example.com",
-		domain.Location{LatitudeX: 37.7749, LongitudeY: -122.4194},
+		*domain.NewLocation(37.7749, -122.4194),
 		"ABC123",
 		"DL1234567890")
 
@@ -22,7 +22,7 @@ func main() {
 		"Jane Smith",
 		"+0987654321",
 		"jane.smith@example.com",
-		domain.Location{LatitudeX: 37.7749, LongitudeY: -122.4194},
+		*domain.NewLocation(37.7749, -122.4194),
 		"Credit Card")
 
 	fmt.Printf("Passenger: %+v\n\n", passenger)
