@@ -37,4 +37,7 @@ func main() {
 
 	trip := domain.NewTrip(*tripRequest, *rider)
 	fmt.Printf("Trip: %+v\n\n", trip)
+
+	payment := domain.NewPayment(*trip, "Cash On Delivery")
+	fmt.Printf("Payment: %+v\n\n", payment)
 }
