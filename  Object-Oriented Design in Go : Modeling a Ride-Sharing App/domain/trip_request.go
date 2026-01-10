@@ -9,7 +9,7 @@ type TripRequest struct {
 	PickupLocation  Location
 	DropoffLocation Location
 	RequestTime     time.Time
-	FareAmount   int
+	FareAmount      int
 }
 
 func NewTripRequest(Passenger Passenger, DropoffLocation Location, FareAmount int) *TripRequest {
@@ -18,6 +18,6 @@ func NewTripRequest(Passenger Passenger, DropoffLocation Location, FareAmount in
 		PickupLocation:  Passenger.CurrentLocation, // a trip must start from the passenger's current location
 		DropoffLocation: DropoffLocation,
 		RequestTime:     time.Now().UTC(),
-		FareAmount:   FareAmount,
+		FareAmount:      FareAmount,
 	}
 }

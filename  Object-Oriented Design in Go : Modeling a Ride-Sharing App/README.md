@@ -172,22 +172,25 @@ We assume a `trip_request` will start from the passenger's current location. So 
 ```go
 package domain
 
+import "time"
+
 type TripRequest struct {
-	PassengerID string
-	Passenger Passenger // TripRequest HAS-A Passenger (composition)
-	PickupLocation Location
+	ID              string
+	PassengerID     string
+	Passenger       Passenger // TripRequest HAS-A Passenger (composition)
+	PickupLocation  Location
 	DropoffLocation Location
-	RequestTime time.Time
-	PaymentAmount int
+	RequestTime     time.Time
+	FareAmount      int
 }
 
-func NewTripRequest(Passenger Passenger, DropoffLocation Location, PaymentAmount int) *TripRequest {
+func NewTripRequest(Passenger Passenger, DropoffLocation Location, FareAmount int) *TripRequest {
 	return &TripRequest{
-		Passenger: Passenger,
-		PickupLocation: Passenger.CurrentLocation, // a trip must start from the passenger's current location
+		Passenger:       Passenger,
+		PickupLocation:  Passenger.CurrentLocation, // a trip must start from the passenger's current location
 		DropoffLocation: DropoffLocation,
-		RequestTime: time.Now().UTC(),
-		PaymentAmount: PaymentAmount,
+		RequestTime:     time.Now().UTC(),
+		FareAmount:      FareAmount,
 	}
 }
 ```
@@ -195,5 +198,43 @@ func NewTripRequest(Passenger Passenger, DropoffLocation Location, PaymentAmount
 You should notice - there is no rider info in a trip_request. Because there can be a trip_request, but no driver found.
 
 But once a driver wants to accept a request, it shall convert to a trip which requires both parties presence!
+
+```go
+package domain
+
+import "time"
+
+type Trip struct {
+	ID              string
+	RiderID         string
+	Rider           Rider // Trip HAS-A Rider (composition)
+	PassengerID     string
+	Passenger       Passenger // Trip HAS-A Passenger (composition)
+	PickupLocation  Location
+	DropoffLocation Location
+	StartTime       time.Time
+	EndTime         time.Time
+	FareAmount      int
+}
+
+func NewTrip(TripRequest TripRequest, Rider Rider) *Trip {
+	return &Trip{
+		ID: "", // generate a unique ID here
+		// take driver info from the assigned driver
+		RiderID: Rider.ID,
+		Rider:   Rider,
+		// take rest of the info from the trip request
+		PassengerID:     TripRequest.PassengerID,
+		Passenger:       TripRequest.Passenger,
+		PickupLocation:  TripRequest.PickupLocation,
+		DropoffLocation: TripRequest.DropoffLocation,
+		FareAmount:      TripRequest.FareAmount,
+		StartTime:       time.Now().UTC(),
+		EndTime:         time.Time{},
+	}
+}
+```
+
+This time you notice a design decision. We could have taken 5-8 params in constructor, instead we took the whole `TripRequest` and `Rider` entity in constructor. It helps in better maintainability.
 
 
