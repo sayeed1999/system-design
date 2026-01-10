@@ -385,3 +385,5 @@ type PassengerRating struct {
 	BaseRating // PassengerRating IS A BaseRating (inheritance via embedding)
 }
 ```
+
+Now a rating must be provided based on a trip. So the rating constructors are provided Trip info.
