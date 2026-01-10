@@ -6,6 +6,8 @@ type Rider struct {
 	// rider specific fields
 	VehicleRegistrationNo string
 	DrivingLicenseNo      string
+	Rating                float32
+	RiderRatings          []RiderRating
 }
 
 func NewRider(id string, name string, phone string, email string, currentLocation Location, vehicleRegNo string, licenseNo string) *Rider {
@@ -19,5 +21,7 @@ func NewRider(id string, name string, phone string, email string, currentLocatio
 		},
 		VehicleRegistrationNo: vehicleRegNo,
 		DrivingLicenseNo:      licenseNo,
+		Rating:                0.0,
+		RiderRatings:          []RiderRating{},
 	}
 }

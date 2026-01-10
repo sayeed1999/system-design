@@ -157,6 +157,8 @@ func main() {
 }
 ```
 
+---
+
 ## Extend Core Entities: Rider, Passenger -> TripRequest -> Trip -> Payment
 
 Now that we are done with the two pillars Rider & Passenger, we will move to the business logic.
@@ -166,8 +168,6 @@ Now that we are done with the two pillars Rider & Passenger, we will move to the
 - Once the ride is finished, we need a payment for the ride, say `Payment`.
 
 So this is the chain of entities needed: trip_request -> trip -> payment.
-
-We assume a `trip_request` will start from the passenger's current location. So we didn't take `pickup_location` in `NewTripRequest(...)` params. <i>Later, you can ofcourse enhance a passenger's ability to choose a different pickup location.</i>
 
 ```go
 package domain
@@ -195,7 +195,9 @@ func NewTripRequest(Passenger Passenger, DropoffLocation Location, FareAmount in
 }
 ```
 
-You should notice - there is no rider info in a trip_request. Because there can be a trip_request, but no driver found.
+We assume a `trip_request` will start from the passenger's current location. So we didn't take `pickup_location` in `NewTripRequest(...)` params. <i>Later, you can ofcourse enhance a passenger's ability to choose a different pickup location.</i>
+
+You should notice - there is no rider info in `trip_request`. Because there can be a trip_request, but no driver found.
 
 But once a driver wants to accept a request, it shall convert to a trip which requires both parties presence!
 
@@ -305,5 +307,57 @@ func main() {
 
 	payment := domain.NewPayment(*trip, "Cash On Delivery")
 	fmt.Printf("Payment: %+v\n\n", payment)
+}
+```
+
+---
+
+## Include Rating Functionality
+
+In a ride sharing platform, often a rider and a customer both needs to provide rating to each other. As it is necessary to flag reckless bad drivers as well as rude misbehaving customers also.
+
+A single rider/passenger will receive a series of ratings that will combinedly form a consolidated rating to display in his profile.
+
+```go
+package domain
+
+// include two new fields for holding the avg rating and all ratings
+type Rider struct {
+	Person // Rider IS A Person (inheritance via embedding)
+
+	// rider specific fields
+	VehicleRegistrationNo string
+	DrivingLicenseNo      string
+	Rating                float32
+	RiderRatings          []RiderRating
+}
+
+// RiderRating represents a rating given by a Passenger to a Rider
+type RiderRating struct {
+	ID         string
+	DriverID   string
+	CustomerID string
+	Rating     float32
+	Comment    string
+}
+
+
+// include two new fields for holding the avg rating and all ratings
+type Passenger struct {
+	Person // Passenger IS A Person (inheritance via embedding)
+
+	// passenger specific fields
+	FavoritePaymentMethod string
+	Rating                float32
+	PassengerRatings      []PassengerRating
+}
+
+// PassengerRating represents a rating given by a Rider to a Passenger
+type PassengerRating struct {
+	ID         string
+	DriverID   string
+	CustomerID string
+	Rating     float32
+	Comment    string
 }
 ```

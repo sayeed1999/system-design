@@ -5,6 +5,8 @@ type Passenger struct {
 
 	// passenger specific fields
 	FavoritePaymentMethod string
+	Rating                float32
+	PassengerRatings      []PassengerRating
 }
 
 func NewPassenger(id string, name string, phone string, email string, currentLocation Location, favoritePaymentMethod string) *Passenger {
@@ -17,5 +19,7 @@ func NewPassenger(id string, name string, phone string, email string, currentLoc
 			CurrentLocation: currentLocation,
 		},
 		FavoritePaymentMethod: favoritePaymentMethod,
+		Rating:                0.0,
+		PassengerRatings:      []PassengerRating{},
 	}
 }
