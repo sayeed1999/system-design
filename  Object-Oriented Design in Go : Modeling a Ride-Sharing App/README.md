@@ -354,10 +354,34 @@ type Passenger struct {
 
 // PassengerRating represents a rating given by a Rider to a Passenger
 type PassengerRating struct {
-	ID         string
-	DriverID   string
-	CustomerID string
-	Rating     float32
-	Comment    string
+	ID          string
+	RiderID     string
+	PassengerID string
+	Rating      float32
+	Comment     string
+}
+```
+
+Now we again use inheritance to remove duplications between the two rating structs.
+
+```go
+package domain
+
+type BaseRating struct {
+	ID          string
+	RiderID     string
+	PassengerID string
+	Rating      float32
+	Comment     string
+}
+
+// RiderRating represents a rating given by a Passenger to a Rider
+type RiderRating struct {
+	BaseRating // RiderRating IS A BaseRating (inheritance via embedding)
+}
+
+// PassengerRating represents a rating given by a Rider to a Passenger
+type PassengerRating struct {
+	BaseRating // PassengerRating IS A BaseRating (inheritance via embedding)
 }
 ```
