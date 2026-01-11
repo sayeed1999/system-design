@@ -41,7 +41,13 @@ func main() {
 	payment := domain.NewPayment(*trip, "Cash On Delivery")
 	fmt.Printf("Payment: %+v\n\n", payment)
 
-	// map the rating to rider
+	// rider receives rating from passenger after trip completion
 	rider.ReceiveRating(trip.ID, trip.PassengerID, 4.5, "Great ride!")
 	fmt.Printf("Updated Rider after Rating: %+v\n\n", rider)
+
+	// passenger receives rating from rider after trip completion
+	passenger.ReceiveRating(trip.ID, trip.RiderID, 5.0, "Excellent passenger!")
+	fmt.Printf("Updated Passenger after Rating: %+v\n\n", passenger)
+
+	// TODO: Use composition to extract common behaviors of Receive Rating between Rider and Passenger
 }
