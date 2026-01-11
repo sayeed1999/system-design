@@ -16,6 +16,4 @@ func NewRiderRating(tripID string, riderID string, passengerID string, ratingVal
 			Comment:     comment,
 		},
 	}
-
-	// TODO: where to update Rider's overall rating???
 }
