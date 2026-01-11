@@ -43,10 +43,9 @@ func main() {
 
 	// creating a rating object for rider
 	riderRating := domain.NewRiderRating(*trip, 4.5, "Great ride!")
-	rider.RiderRatings = append(rider.RiderRatings, *riderRating)
 	fmt.Printf("Rider Rating: %+v\n\n", riderRating)
 
-	// add the rating to rider's overall rating
+	// map the rating to rider
 	rider.ProvideRating(*riderRating)
 	fmt.Printf("Updated Rider after Rating: %+v\n\n", rider)
 }
