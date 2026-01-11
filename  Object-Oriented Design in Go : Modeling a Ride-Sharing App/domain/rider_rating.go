@@ -5,12 +5,13 @@ type RiderRating struct {
 	BaseRating // RiderRating IS A BaseRating (inheritance via embedding)
 }
 
-func NewRiderRating(trip Trip, ratingValue float32, comment string) *RiderRating {
+func NewRiderRating(tripID string, riderID string, passengerID string, ratingValue float32, comment string) *RiderRating {
 	return &RiderRating{
 		BaseRating: BaseRating{
 			ID:          "", // generate unique ID
-			RiderID:     trip.Rider.ID,
-			PassengerID: trip.Passenger.ID,
+			TripID:      tripID,
+			RiderID:     riderID,
+			PassengerID: passengerID,
 			Rating:      ratingValue,
 			Comment:     comment,
 		},

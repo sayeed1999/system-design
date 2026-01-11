@@ -26,9 +26,14 @@ func NewRider(id string, name string, phone string, email string, currentLocatio
 	}
 }
 
-func (r *Rider) ProvideRating(rating RiderRating) {
-	r.RiderRatings = append(r.RiderRatings, rating)
-	// Update overall rating
+func (r *Rider) ReceiveRating(tripID string, passengerID string, ratingValue float32, comment string) {
+	// first create the rating object
+	rating := NewRiderRating(tripID, r.ID, passengerID, ratingValue, comment)
+
+	// append to Rider's ratings
+	r.RiderRatings = append(r.RiderRatings, *rating)
+
+	// Re-calculate overall rating
 	var total float32
 	for _, r := range r.RiderRatings {
 		total += r.Rating

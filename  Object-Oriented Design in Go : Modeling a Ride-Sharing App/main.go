@@ -41,11 +41,7 @@ func main() {
 	payment := domain.NewPayment(*trip, "Cash On Delivery")
 	fmt.Printf("Payment: %+v\n\n", payment)
 
-	// creating a rating object for rider
-	riderRating := domain.NewRiderRating(*trip, 4.5, "Great ride!")
-	fmt.Printf("Rider Rating: %+v\n\n", riderRating)
-
 	// map the rating to rider
-	rider.ProvideRating(*riderRating)
+	rider.ReceiveRating(trip.ID, trip.PassengerID, 4.5, "Great ride!")
 	fmt.Printf("Updated Rider after Rating: %+v\n\n", rider)
 }
