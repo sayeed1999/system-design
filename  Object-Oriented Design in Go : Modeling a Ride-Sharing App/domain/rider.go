@@ -26,6 +26,8 @@ func NewRider(id string, name string, phone string, email string, currentLocatio
 	}
 }
 
+// From DDD perspective, this is a domain behavior of Rider aggregate root!
+// Rider will receive rating from Passenger after trip completion and modify its own state and its collection of RiderRatings
 func (r *Rider) ReceiveRating(tripID string, passengerID string, ratingValue float32, comment string) {
 	// first create the rating object
 	rating := NewRiderRating(tripID, r.ID, passengerID, ratingValue, comment)
