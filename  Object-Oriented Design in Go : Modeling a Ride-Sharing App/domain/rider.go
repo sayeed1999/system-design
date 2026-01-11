@@ -25,3 +25,13 @@ func NewRider(id string, name string, phone string, email string, currentLocatio
 		RiderRatings:          []RiderRating{},
 	}
 }
+
+func (r *Rider) ProvideRating(rating RiderRating) {
+	r.RiderRatings = append(r.RiderRatings, rating)
+	// Update overall rating
+	var total float32
+	for _, r := range r.RiderRatings {
+		total += r.Rating
+	}
+	r.Rating = total / float32(len(r.RiderRatings))
+}

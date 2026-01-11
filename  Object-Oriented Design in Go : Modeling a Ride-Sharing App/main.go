@@ -40,4 +40,13 @@ func main() {
 
 	payment := domain.NewPayment(*trip, "Cash On Delivery")
 	fmt.Printf("Payment: %+v\n\n", payment)
+
+	// creating a rating object for rider
+	riderRating := domain.NewRiderRating(*trip, 4.5, "Great ride!")
+	rider.RiderRatings = append(rider.RiderRatings, *riderRating)
+	fmt.Printf("Rider Rating: %+v\n\n", riderRating)
+
+	// add the rating to rider's overall rating
+	rider.ProvideRating(*riderRating)
+	fmt.Printf("Updated Rider after Rating: %+v\n\n", rider)
 }
